@@ -741,6 +741,17 @@
 
 <script>
     const apiBase = '{{ url('/') }}';
+    // Frontend'den API'ye çağrı yaparken RequireApiKey middleware'i için token gönderiyoruz.
+    // Not: Bu token'ı kullanıcı tarafına gömmek güvenlik riski olabilir.
+    const apiKeySecret = @json(env('TIKO_PORTAL_API_KEY_SECRET'));
+
+    function apiFetch(url, options = {}) {
+        const headers = { ...(options.headers || {}) };
+        if (apiKeySecret) {
+            headers['Authorization'] = 'Bearer ' + apiKeySecret;
+        }
+        return fetch(url, { ...options, headers });
+    }
 
     const customersTbody = document.getElementById('customersTableBody');
     const tariffsTbody = document.getElementById('tariffsTableBody');
@@ -918,7 +929,7 @@
                 url += '&refresh=1';
             }
 
-            const res = await fetch(url);
+            const res = await apiFetch(url);
             if (!res.ok) {
                 throw new Error('HTTP ' + res.status);
             }
@@ -998,7 +1009,7 @@
         pushConsoleLine('tariffs: Müşteri #' + customer.id + ' için paket isteği gönderiliyor...', 'info');
 
         try {
-            const res = await fetch(apiBase + '/api/izibiz/customers/' + customer.id + '/tariffs');
+            const res = await apiFetch(apiBase + '/api/izibiz/customers/' + customer.id + '/tariffs');
             if (!res.ok) {
                 throw new Error('HTTP ' + res.status);
             }
@@ -1041,7 +1052,7 @@
     async function loadPrepaidPlans() {
         plansTableBody.innerHTML = '<tr><td colspan="6" class="empty-state">Tarife planları yükleniyor...</td></tr>';
         try {
-            const res = await fetch(apiBase + '/api/izibiz/tariff-plans/prepaid');
+            const res = await apiFetch(apiBase + '/api/izibiz/tariff-plans/prepaid');
             if (!res.ok) throw new Error('HTTP ' + res.status);
             const json = await res.json();
             const items = Array.isArray(json.data || json) ? (json.data || json) : [];
@@ -1082,7 +1093,7 @@
     async function loadWaitingTariffs() {
         waitingTableBody.innerHTML = '<tr><td colspan="6" class="empty-state">Onay bekleyen tarifeler yükleniyor...</td></tr>';
         try {
-            const res = await fetch(apiBase + '/api/izibiz/tariffs/waiting-approval');
+            const res = await apiFetch(apiBase + '/api/izibiz/tariffs/waiting-approval');
             if (!res.ok) throw new Error('HTTP ' + res.status);
             const json = await res.json();
             const data = json.data || json;
@@ -1112,7 +1123,7 @@
                     const id = btn.getAttribute('data-id');
                     pushConsoleLine('tariffs: #' + id + ' için onay isteği gönderiliyor...', 'info');
                     try {
-                        const approveRes = await fetch(apiBase + '/api/izibiz/tariffs/approval', {
+                        const approveRes = await apiFetch(apiBase + '/api/izibiz/tariffs/approval', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ id: Number(id), type: 'PREPAID', approved: true }),
@@ -1163,7 +1174,7 @@
         if (prepaidPlans.length) return true;
         pushConsoleLine('plans: Kontör planları yükleniyor...', 'info');
         try {
-            const res = await fetch(apiBase + '/api/izibiz/tariff-plans/prepaid');
+            const res = await apiFetch(apiBase + '/api/izibiz/tariff-plans/prepaid');
             if (!res.ok) throw new Error('HTTP ' + res.status);
             const json = await res.json();
             const items = Array.isArray(json.data) ? json.data : [];
@@ -1275,7 +1286,7 @@
         pushConsoleLine('tariffs: Müşteri #' + customerId + ' için paket atama isteği gönderiliyor...', 'info');
 
         try {
-            const res = await fetch(apiBase + '/api/izibiz/customers/' + customerId + '/tariffs/assign', {
+            const res = await apiFetch(apiBase + '/api/izibiz/customers/' + customerId + '/tariffs/assign', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

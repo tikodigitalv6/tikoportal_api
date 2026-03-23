@@ -1,0 +1,511 @@
+{
+    "info": {
+      "name": "Tiko Izibiz Proxy API",
+      "_postman_id": "5d7f6f3a-3a1b-4c2e-9b6a-3e1c0b1d2c3a",
+      "description": "Bu collection, Laravel'deki proxy endpoint'lere ( /api/izibiz/* ) istek atar. İzibiz auth bilgileri sunucu tarafında env'den okunur.",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "version": "1.0.0"
+    },
+    "variables": [
+      {
+        "key": "baseUrl",
+        "value": "https://api.tikoportal.com",
+        "type": "default"
+      },
+      {
+        "key": "apiKeySecret",
+        "value": "a9X2mL7qP4vN8rT1yK6wZ3cH5bJ0uD",
+        "type": "default"
+      },
+      {
+        "key": "customerId",
+        "value": "149154",
+        "type": "default"
+      },
+      {
+        "key": "tariffId",
+        "value": "233012",
+        "type": "default"
+      },
+      {
+        "key": "planId",
+        "value": "5592",
+        "type": "default"
+      }
+    ],
+    "item": [
+      {
+        "name": "Auth",
+        "item": [
+          {
+            "name": "GET /api/izibiz/auth/access",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-API-KEY",
+                  "value": "{{apiKeySecret}}"
+                }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/api/izibiz/auth/access",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "izibiz",
+                  "auth",
+                  "access"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Customers",
+        "item": [
+          {
+            "name": "GET /api/izibiz/customers (page + size + q)",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-API-KEY",
+                  "value": "{{apiKeySecret}}"
+                }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/api/izibiz/customers?page=0&size=20&q=",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "izibiz",
+                  "customers"
+                ],
+                "query": [
+                  {
+                    "key": "page",
+                    "value": "0"
+                  },
+                  {
+                    "key": "size",
+                    "value": "20"
+                  },
+                  {
+                    "key": "q",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "GET /api/izibiz/customers/{customerId}/tariffs (tüm sayfalar)",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-API-KEY",
+                  "value": "{{apiKeySecret}}"
+                }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/api/izibiz/customers/{{customerId}}/tariffs",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "izibiz",
+                  "customers",
+                  "{{customerId}}",
+                  "tariffs"
+                ]
+              }
+            }
+          },
+          {
+            "name": "GET /api/izibiz/customers/{customerId}/tariffs/prepaid",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-API-KEY",
+                  "value": "{{apiKeySecret}}"
+                }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/api/izibiz/customers/{{customerId}}/tariffs/prepaid",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "izibiz",
+                  "customers",
+                  "{{customerId}}",
+                  "tariffs",
+                  "prepaid"
+                ],
+                "query": [
+                  {
+                    "key": "status",
+                    "value": "WAIT_APPROVAL"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Tariffs",
+        "item": [
+          {
+            "name": "GET /api/izibiz/tariffs/waiting-approval",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-API-KEY",
+                  "value": "{{apiKeySecret}}"
+                }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/api/izibiz/tariffs/waiting-approval",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "izibiz",
+                  "tariffs",
+                  "waiting-approval"
+                ]
+              }
+            }
+          },
+          {
+            "name": "POST /api/izibiz/tariffs/approval",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-API-KEY",
+                  "value": "{{apiKeySecret}}"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"id\": {{tariffId}},\n  \"type\": \"PREPAID\",\n  \"approved\": true\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/izibiz/tariffs/approval",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "izibiz",
+                  "tariffs",
+                  "approval"
+                ]
+              }
+            }
+          },
+          {
+            "name": "POST /api/izibiz/customers/{customerId}/tariffs/assign (Yeni kontör ata)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-API-KEY",
+                  "value": "{{apiKeySecret}}"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"id\": {{planId}},\n  \"type\": \"PREPAID\",\n  \"startDate\": \"2026-03-18\",\n  \"duration\": 6,\n  \"amount\": 100,\n  \"price\": 0,\n  \"billed\": false,\n  \"paymentType\": \"OTHER\",\n  \"note\": \"Postman deneme\"\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/izibiz/customers/{{customerId}}/tariffs/assign",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "izibiz",
+                  "customers",
+                  "{{customerId}}",
+                  "tariffs",
+                  "assign"
+                ]
+              }
+            }
+          },
+          {
+            "name": "POST /api/izibiz/tariffs/purchase",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-API-KEY",
+                  "value": "{{apiKeySecret}}"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"id\": {{planId}},\n  \"type\": \"PREPAID\",\n  \"paymentType\": \"CREDIT_CARD\"\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/izibiz/tariffs/purchase",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "izibiz",
+                  "tariffs",
+                  "purchase"
+                ]
+              }
+            }
+          },
+          {
+            "name": "POST /api/izibiz/tariffs/{tariffId}/upgrade",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-API-KEY",
+                  "value": "{{apiKeySecret}}"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"id\": {{planId}},\n  \"type\": \"PREPAID\",\n  \"name\": \"Upgrade deneme\",\n  \"amount\": 200,\n  \"price\": 0,\n  \"duration\": 6,\n  \"startDate\": \"2026-03-18\"\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/izibiz/tariffs/{{tariffId}}/upgrade",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "izibiz",
+                  "tariffs",
+                  "{{tariffId}}",
+                  "upgrade"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Tariff Plans",
+        "item": [
+          {
+            "name": "GET /api/izibiz/tariff-plans/prepaid",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-API-KEY",
+                  "value": "{{apiKeySecret}}"
+                }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/api/izibiz/tariff-plans/prepaid",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "izibiz",
+                  "tariff-plans",
+                  "prepaid"
+                ]
+              }
+            }
+          },
+          {
+            "name": "GET /api/izibiz/tariff-plans/prepaid/{tariffId}/upgradable",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-API-KEY",
+                  "value": "{{apiKeySecret}}"
+                }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/api/izibiz/tariff-plans/prepaid/{{tariffId}}/upgradable",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "izibiz",
+                  "tariff-plans",
+                  "prepaid",
+                  "{{tariffId}}",
+                  "upgradable"
+                ]
+              }
+            }
+          },
+          {
+            "name": "GET /api/izibiz/tariff-plans/eledger-archive",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-API-KEY",
+                  "value": "{{apiKeySecret}}"
+                }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/api/izibiz/tariff-plans/eledger-archive",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "izibiz",
+                  "tariff-plans",
+                  "eledger-archive"
+                ]
+              }
+            }
+          },
+          {
+            "name": "GET /api/izibiz/tariff-plans/postpaid",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-API-KEY",
+                  "value": "{{apiKeySecret}}"
+                }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/api/izibiz/tariff-plans/postpaid",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "izibiz",
+                  "tariff-plans",
+                  "postpaid"
+                ]
+              }
+            }
+          },
+          {
+            "name": "GET /api/izibiz/tariff-plans/pay-as-you-usage",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-API-KEY",
+                  "value": "{{apiKeySecret}}"
+                }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/api/izibiz/tariff-plans/pay-as-you-usage",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "izibiz",
+                  "tariff-plans",
+                  "pay-as-you-usage"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+  
+  
